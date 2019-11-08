@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 typedef void (^ _Nullable completion)(int index);
 
 + (void)
-shwoAlertControllerInViewController: (UIViewController *)vc withTitle: (nullable NSString *)title andMessage: (nullable NSString *)message withButtons: (NSArray *)button withCompletion: (completion)completionBlock;
+shwoActionSheetInViewController: (UIViewController *)vc withTitle: (nullable NSString *)title andMessage: (nullable NSString *)message withButtons: (NSArray *)button cancelAvailable: (BOOL)isCancel withCompletion: (completion)completionBlock;
 
 @end
 

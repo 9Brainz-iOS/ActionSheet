@@ -21,7 +21,7 @@
     
 }
 
-- (IBAction)btnShowAlertTapped:(id)sender
+- (IBAction)btnShowSheetTapped:(id)sender
 {
     [[self view] endEditing:YES];
     
@@ -30,11 +30,11 @@
     
     if ([strTitle isEqualToString:@""] || [strMsg isEqualToString:@""]) {
 
-        [Utility shwoAlertControllerInViewController:self withTitle:[NSString stringWithFormat:@"Empty Text"] andMessage:[NSString stringWithFormat:@"Both text required for Show this alert!"] withButtons:[NSArray arrayWithObjects:[NSString stringWithFormat:@"Ok"], nil] withCompletion:nil];
+        [Utility shwoActionSheetInViewController:self withTitle:[NSString stringWithFormat:@"Empty Text"] andMessage:[NSString stringWithFormat:@"Both text required for Show this alert!"] withButtons:[NSArray arrayWithObjects:[NSString stringWithFormat:@"Ok"], nil] cancelAvailable:NO withCompletion:nil];
     } else {
         
-        [Utility shwoAlertControllerInViewController:self withTitle:strTitle andMessage:strMsg withButtons:[NSArray arrayWithObjects:[NSString stringWithFormat:@"Ok"], nil] withCompletion:^(int index) {
-               
+        [Utility shwoActionSheetInViewController:self withTitle:strTitle andMessage:strMsg withButtons:[NSArray arrayWithObjects:[NSString stringWithFormat:@"Ok"], nil] cancelAvailable:YES withCompletion:^(int index) {
+            
             if (index == 0) {
                    
                 NSLog(@"OK button clicked");
@@ -44,29 +44,29 @@
     }
 }
 
-- (IBAction)btnShowWithTwoAlertTapped:(id)sender
+- (IBAction)btnShowWithoutTitleTapped:(id)sender
 {
     [[self view] endEditing:YES];
     
-    [Utility shwoAlertControllerInViewController:self withTitle:[NSString stringWithFormat:@"Two Button"] andMessage:[NSString stringWithFormat:@"Are you sure?"] withButtons:[NSArray arrayWithObjects:[NSString stringWithFormat:@"No"], [NSString stringWithFormat:@"Yes"], nil] withCompletion:^(int index) {
+    [Utility shwoActionSheetInViewController:self withTitle:nil andMessage:[NSString stringWithFormat:@"Connect to the Internet"] withButtons:[NSArray arrayWithObjects:[NSString stringWithFormat:@"Check Internet"], [NSString stringWithFormat:@"Not Now"], nil] cancelAvailable:YES withCompletion:^(int index) {
         
         if (index == 0) {
-            
-            NSLog(@"NO button clicked");
+               
+            NSLog(@"CHECK INTERNET button clicked");
             // do your coding stuff here
         } else if (index == 1) {
             
-            NSLog(@"YES button clicked");
+            NSLog(@"NOT NOW button clicked");
             // do your coding stuff here
         }
     }];
 }
 
-- (IBAction)btnShowWithThreeAlertTapped:(id)sender
+- (IBAction)btnShowWithoutMessageTapped:(id)sender
 {
     [[self view] endEditing:YES];
     
-    [Utility shwoAlertControllerInViewController:self withTitle:[NSString stringWithFormat:@"Three Button"] andMessage:[NSString stringWithFormat:@"Love this app! Give your important Rate about it."] withButtons:[NSArray arrayWithObjects:[NSString stringWithFormat:@"Rate Now"], [NSString stringWithFormat:@"Later"], [NSString stringWithFormat:@"No, Thanks"], nil] withCompletion:^(int index) {
+    [Utility shwoActionSheetInViewController:self withTitle:[NSString stringWithFormat:@"Love this app! Give your important Rate about it."] andMessage:nil withButtons:[NSArray arrayWithObjects:[NSString stringWithFormat:@"Rate Now"], [NSString stringWithFormat:@"Later"], [NSString stringWithFormat:@"No, Thanks"], nil] cancelAvailable:NO withCompletion:^(int index) {
         
         if (index == 0) {
             
@@ -84,18 +84,34 @@
     }];
 }
 
-- (IBAction)btnAlertWithTitleTapped:(id)sender
+- (IBAction)btnShowWithoutCancelTapped:(id)sender
 {
     [[self view] endEditing:YES];
     
-    [Utility shwoAlertControllerInViewController:self withTitle:[NSString stringWithFormat:@"No Internet Connection"] andMessage:nil withButtons:[NSArray arrayWithObjects:[NSString stringWithFormat:@"Ok"], nil] withCompletion:nil];
+    [Utility shwoActionSheetInViewController:self withTitle:[NSString stringWithFormat:@"Rate Us!"] andMessage:[NSString stringWithFormat:@"Provide your valuable feedback about this application!"] withButtons:[NSArray arrayWithObjects:[NSString stringWithFormat:@"Go to Store"], nil] cancelAvailable:YES withCompletion:^(int index) {
+        
+        if (index == 0) {
+               
+            NSLog(@"GO TO STORE button clicked");
+            // do your coding stuff here
+        }
+    }];
 }
 
-- (IBAction)btnAlertWithMsgTapped:(id)sender
+- (IBAction)btnShowMulipleActionTapped:(id)sender
 {
     [[self view] endEditing:YES];
     
-    [Utility shwoAlertControllerInViewController:self withTitle:nil andMessage:[NSString stringWithFormat:@"Task complete successfully!"] withButtons:[NSArray arrayWithObjects:[NSString stringWithFormat:@"Ok"], nil] withCompletion:nil];
+    NSArray *weekArr = [NSArray arrayWithObjects:@"Monday", @"Tuesday", @"Wednesday", @"Thursday", @"Friday", @"Saturday", @"Sunday", nil];
+    
+    [Utility shwoActionSheetInViewController:self withTitle:[NSString stringWithFormat:@"Start Week Day"] andMessage:[NSString stringWithFormat:@"Select start week day!"] withButtons:weekArr cancelAvailable:YES withCompletion:^(int index) {
+        
+        if (index < weekArr.count) {
+               
+            NSLog(@"%@ button clicked", weekArr[index]);
+            // do your coding stuff here
+        }
+    }];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
