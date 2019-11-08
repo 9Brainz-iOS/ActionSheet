@@ -39,9 +39,9 @@ There are two different project in this repositor:
 typedef void (^ _Nullable completion)(int index);
 
 + (void)
-shwoAlertControllerInViewController: (UIViewController *)vc withTitle: (nullable NSString *)title andMessage: (nullable NSString *)message withButtons: (NSArray *)button withCompletion: (completion)completionBlock
+shwoActionSheetInViewController: (UIViewController *)vc withTitle: (nullable NSString *)title andMessage: (nullable NSString *)message withButtons: (NSArray *)button cancelAvailable: (BOOL)isCancel withCompletion: (completion)completionBlock
 {
-    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleActionSheet];
     
     for (int index = 0; index < button.count; index++) {
         
@@ -56,7 +56,35 @@ shwoAlertControllerInViewController: (UIViewController *)vc withTitle: (nullable
         [alertController addAction:action];
     }
     
-    [vc presentViewController:alertController animated:YES completion:nil];
+    if (isCancel) {
+        
+        UIAlertAction *action = [UIAlertAction actionWithTitle:[NSString stringWithFormat:@"Cancel"] style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            
+            if (completionBlock != nil) {
+
+                completionBlock((int)[button count]);
+            }
+        }];
+        
+        [alertController addAction:action];
+    }
+    
+    if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) {
+
+        // if device is iPhone
+        [vc presentViewController:alertController animated:YES completion:nil];
+    } else {
+        
+        // if device is iPad
+        [alertController setModalPresentationStyle:UIModalPresentationPopover];
+        
+        UIPopoverPresentationController *popoverController = [alertController popoverPresentationController];
+        [popoverController setSourceView:[vc view]];
+        [popoverController setSourceRect:CGRectMake(CGRectGetMidX([[vc view] bounds]), CGRectGetMidY([[vc view] bounds]), 0, 0)];
+        [popoverController setPermittedArrowDirections:UIPopoverArrowDirectionUnknown];
+        
+        [vc presentViewController:alertController animated:YES completion:nil];
+    }
 }
 ```
 
