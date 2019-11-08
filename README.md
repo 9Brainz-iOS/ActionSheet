@@ -63,9 +63,9 @@ shwoAlertControllerInViewController: (UIViewController *)vc withTitle: (nullable
 2. **Swift** (Utility.swift file)
 
 ```swift
-static func shwoAlertControllerInViewController(vc: UIViewController, withTitle title: String?, andMessage message: String?, withButtons button: [String], completion:((_ index: Int) -> Void)!) -> Void
+static func shwoActionSheetInViewController(vc: UIViewController, withTitle title: String?, andMessage message: String?, withButtons button: [String], cancelAvailable isCancel: Bool, completion:((_ index: Int) -> Void)!) -> Void
 {
-    let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    let alertController = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
 
     for index in 0 ..< button.count  {
 
@@ -79,8 +79,36 @@ static func shwoAlertControllerInViewController(vc: UIViewController, withTitle 
 
         alertController.addAction(action)
     }
+        
+    if isCancel {
+            
+        let action = UIAlertAction(title: "Cancel", style: .destructive, handler: { (alert: UIAlertAction!) in
 
-    vc.present(alertController, animated: true, completion: nil)
+            if completion != nil {
+
+                completion(button.count)
+            }
+        })
+
+        alertController.addAction(action)
+    }
+        
+    if (UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone) {
+
+        // if device is iPhone
+        vc.present(alertController, animated: true, completion: nil)
+    } else {
+            
+        // if device is iPad
+        alertController.modalPresentationStyle = .popover
+
+        if let popoverController = alertController.popoverPresentationController {
+                
+            popoverController.sourceView = vc.view
+            popoverController.sourceRect = CGRect(x: vc.view.bounds.midX, y: vc.view.bounds.midY, width: 0, height: 0)
+            popoverController.permittedArrowDirections = []
+        }
+    }
 }
 ```
 
